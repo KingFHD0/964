@@ -42,8 +42,15 @@ export function AdminGate({
       router.replace("/admin/sign-in?reason=forbidden");
       return;
     }
-    bump();
-  }, [ready, session, pathname, router, hasRole, bump, minRole]);
+    // bump lastSeenAt only once per navigation, not on every re-render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, pathname]);
+
+  // Separate one-time bump on mount
+  React.useEffect(() => {
+    if (ready && session) bump();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready]);
 
   if (pathname === "/admin/sign-in") return <>{children}</>;
   if (!ready) return <AdminLoading />;
