@@ -4,6 +4,7 @@ import { CosmicBackground } from "@/components/cosmic/CosmicBackground";
 import { Toaster } from "@/components/ui/Toaster";
 import { ServiceWorkerRegister } from "@/components/pwa/ServiceWorkerRegister";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
+import { CommandPaletteProvider } from "@/components/search/CommandPalette";
 import "./globals.css";
 
 const inter = Inter({
@@ -76,6 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <Toaster />
         <InstallPrompt />
+        <CommandPaletteProvider />
         <ServiceWorkerRegister />
       </body>
     </html>

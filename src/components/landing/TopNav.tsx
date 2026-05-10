@@ -8,6 +8,7 @@ import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
 
 const LINKS = [
+  { href: "#ecosystem", label: "Ecosystem" },
   { href: "#features", label: "Features" },
   { href: "#categories", label: "Library" },
   { href: "#pricing", label: "Pricing" },

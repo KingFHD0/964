@@ -2,19 +2,30 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, BookMarked, Heart, Bell, Users } from "lucide-react";
+import { BookOpen, Home, Search, Sparkles, Wrench } from "lucide-react";
 import { cn } from "@/lib/cn";
 
-const ITEMS = [
-  { href: "/dashboard", label: "Home", icon: LayoutDashboard },
-  { href: "/library", label: "Library", icon: BookMarked },
-  { href: "/favorites", label: "Saved", icon: Heart },
-  { href: "/updates", label: "Updates", icon: Bell },
-  { href: "/community", label: "People", icon: Users }
+type Item =
+  | { kind: "link"; href: string; label: string; icon: React.ComponentType<{ className?: string }> }
+  | { kind: "search"; label: string; icon: React.ComponentType<{ className?: string }> };
+
+const ITEMS: Item[] = [
+  { kind: "link", href: "/dashboard", label: "Home", icon: Home },
+  { kind: "link", href: "/library", label: "Prompts", icon: Sparkles },
+  { kind: "search", label: "Search", icon: Search },
+  { kind: "link", href: "/encyclopedia", label: "Learn", icon: BookOpen },
+  { kind: "link", href: "/tools", label: "Tools", icon: Wrench }
 ];
 
 export function MobileNav() {
   const pathname = usePathname();
+
+  function openPalette() {
+    if (typeof window !== "undefined" && window.__aetherOpenPalette) {
+      window.__aetherOpenPalette();
+    }
+  }
+
   return (
     <nav
       aria-label="Primary"
@@ -22,10 +33,28 @@ export function MobileNav() {
     >
       <div className="mx-3 mb-3 overflow-hidden rounded-[22px] glass-strong shadow-[0_20px_60px_-20px_rgba(0,0,0,0.8)]">
         <ul className="grid grid-cols-5">
-          {ITEMS.map((it) => {
-            const active = pathname === it.href || (it.href !== "/dashboard" && pathname.startsWith(it.href));
+          {ITEMS.map((it, idx) => {
+            if (it.kind === "search") {
+              return (
+                <li key="search">
+                  <button
+                    onClick={openPalette}
+                    className="group relative flex w-full flex-col items-center justify-center gap-1 py-3 text-[11px] text-primary transition-colors"
+                    aria-label="Open search"
+                  >
+                    <div className="relative grid h-10 w-10 -translate-y-1 place-items-center rounded-2xl bg-[linear-gradient(135deg,#7C8CFF_0%,#5CE1E6_100%)] shadow-[0_10px_28px_-8px_rgba(124,140,255,0.55)]">
+                      <Search className="h-[17px] w-[17px] text-white" />
+                    </div>
+                    <span className="text-primary/90">{it.label}</span>
+                  </button>
+                </li>
+              );
+            }
+            const active =
+              pathname === it.href ||
+              (it.href !== "/dashboard" && pathname.startsWith(it.href));
             return (
-              <li key={it.href}>
+              <li key={it.href + idx}>
                 <Link
                   href={it.href}
                   className={cn(
@@ -45,7 +74,9 @@ export function MobileNav() {
                         }}
                       />
                     ) : null}
-                    <it.icon className={cn("relative h-[18px] w-[18px]", active && "text-accent")} />
+                    <it.icon
+                      className={cn("relative h-[18px] w-[18px]", active && "text-accent")}
+                    />
                   </div>
                   <span className={cn(active && "text-primary")}>{it.label}</span>
                 </Link>

@@ -22,7 +22,7 @@ export function Hero() {
         >
           <Sparkles className="h-3.5 w-3.5 text-accent-secondary" />
           <span className="text-[11px] uppercase tracking-[0.2em] text-primary/70">
-            Welcome to Aether 964
+            The AI operating system for the Middle East
           </span>
         </motion.div>
 
@@ -43,8 +43,8 @@ export function Hero() {
           transition={{ duration: 1, ease, delay: 0.18 }}
           className="mx-auto mt-6 max-w-2xl text-balance text-base leading-relaxed text-primary/65 md:text-lg"
         >
-          AI infrastructure for the new Iraqi digital era. A premium prompt-as-a-service platform
-          built for founders, creators, and studios who move at cinematic pace.
+          Prompts, tools, models, workflows, and knowledge — one premium surface,
+          calibrated for founders, creators, and studios who move at cinematic pace.
         </motion.p>
 
         <motion.div
@@ -53,11 +53,11 @@ export function Hero() {
           transition={{ duration: 1, ease, delay: 0.26 }}
           className="mx-auto mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
         >
-          <Button href="/library" size="lg" trailing={<ArrowRight className="h-4 w-4" />}>
-            Explore Prompts
+          <Button href="/dashboard" size="lg" trailing={<ArrowRight className="h-4 w-4" />}>
+            Enter Aether
           </Button>
-          <Button href="#overview" variant="secondary" size="lg" leading={<PlayCircle className="h-4 w-4" />}>
-            Watch Overview
+          <Button href="#ecosystem" variant="secondary" size="lg" leading={<PlayCircle className="h-4 w-4" />}>
+            Explore the ecosystem
           </Button>
         </motion.div>
 
