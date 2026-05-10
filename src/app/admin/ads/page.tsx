@@ -39,6 +39,7 @@ import {
 import { useAdminAuth } from "@/lib/store/admin-auth";
 import { toast } from "@/components/ui/Toaster";
 import { sanitizeText, sanitizeUrl } from "@/lib/security/sanitize";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 
 /**
  * Advertisements admin — premium sponsorship management.
@@ -467,6 +468,16 @@ function AdEditor({
                 <span className="font-mono text-[12.5px] text-primary/80">{a.accent[1]}</span>
               </div>
             </Field>
+          </div>
+
+          {/* Ad image */}
+          <div className="mt-4">
+            <ImageUploader
+              value={a.imageUrl}
+              onChange={(url) => patch("imageUrl", url)}
+              label="Ad image / banner"
+              hint="Optional — shown above the ad title"
+            />
           </div>
 
           <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">

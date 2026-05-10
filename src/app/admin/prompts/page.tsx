@@ -31,6 +31,7 @@ import { useAdminAuth } from "@/lib/store/admin-auth";
 import { toast } from "@/components/ui/Toaster";
 import { CATEGORIES, type Prompt, type PromptCategory } from "@/lib/prompts";
 import { sanitizePrompt, sanitizeText } from "@/lib/security/sanitize";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 
 /**
  * Prompts admin — CRUD + featured/pro toggles + category filter.
@@ -452,6 +453,16 @@ function PromptEditor({
           description="Locked to Supernova members."
           checked={!!p.isPro}
           onChange={(v) => update("isPro", v)}
+        />
+      </div>
+
+      {/* Image upload */}
+      <div className="mt-4">
+        <ImageUploader
+          value={p.imageUrl}
+          onChange={(url) => update("imageUrl", url)}
+          label="Card image"
+          hint="Optional — shown at the top of the prompt card"
         />
       </div>
 

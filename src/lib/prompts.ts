@@ -20,6 +20,7 @@ export type Prompt = {
   isPro?: boolean;
   readTime?: string;
   gradient: [string, string];
+  imageUrl?: string;
 };
 
 export const CATEGORIES: PromptCategory[] = [

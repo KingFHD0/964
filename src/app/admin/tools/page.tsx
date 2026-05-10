@@ -25,6 +25,7 @@ import {
   type ToolCategory
 } from "@/lib/ecosystem";
 import { sanitizeText, sanitizeUrl } from "@/lib/security/sanitize";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 
 export default function AdminToolsPage() {
   const tools = useContentStore((s) => s.tools);
@@ -368,6 +369,16 @@ function ToolEditor({
             }
           />
         </Field>
+      </div>
+
+      {/* Tool logo / image */}
+      <div className="mt-4">
+        <ImageUploader
+          value={(t as any).imageUrl}
+          onChange={(url) => patch("imageUrl" as any, url)}
+          label="Tool logo / screenshot"
+          hint="Optional — shown in the directory card"
+        />
       </div>
 
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
