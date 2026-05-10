@@ -46,5 +46,13 @@ export function useLocalStorage<T>(key: string, initial: T) {
       /* noop */
     }
   }, [key, value, ready]);
-  return [value, setValue, ready] as const;
+
+  const update = (updater: T | ((prev: T) => T)) => {
+    setValue((prev) => {
+      const next = typeof updater === "function" ? (updater as (prev: T) => T)(prev) : updater;
+      return next;
+    });
+  };
+
+  return [value, update, ready] as const;
 }

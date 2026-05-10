@@ -14,8 +14,9 @@ export default function FavoritesPage() {
   const [active, setActive] = React.useState<Prompt | null>(null);
 
   const saved = React.useMemo(
-    () => PROMPTS.filter((p) => fav.has(p.id)),
-    [fav]
+    () => PROMPTS.filter((p) => fav.ids.includes(p.id)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [fav.ids]
   );
 
   return (

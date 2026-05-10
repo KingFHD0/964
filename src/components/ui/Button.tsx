@@ -69,7 +69,7 @@ export function Button(props: Props) {
       </Link>
     );
   }
-  const { href: _h, ...btn } = props as ButtonAsButton;
+  const { href: _h, variant: _v, size: _s, leading: _l, trailing: _t, ...btn } = props as any;
   return (
     <button className={classes} {...btn}>
       {content}
