@@ -76,18 +76,20 @@ export function CommandPalette({
   const inputRef = React.useRef<HTMLInputElement>(null);
   const listRef = React.useRef<HTMLUListElement>(null);
 
-  // Pull live snapshot from the content store so admin edits appear instantly.
-  const snapshot = useContentStore((s) => ({
-    prompts: s.prompts,
-    tools: s.tools,
-    models: s.models,
-    articles: s.articles,
-    courses: s.courses,
-    workflows: s.workflows,
-    guides: s.guides,
-    news: s.news
-  }));
-  const index = React.useMemo(() => buildSearchIndex(snapshot), [snapshot]);
+  // Pull live arrays from the content store individually (stable references).
+  const prompts = useContentStore((s) => s.prompts);
+  const tools = useContentStore((s) => s.tools);
+  const models = useContentStore((s) => s.models);
+  const articles = useContentStore((s) => s.articles);
+  const courses = useContentStore((s) => s.courses);
+  const workflows = useContentStore((s) => s.workflows);
+  const guides = useContentStore((s) => s.guides);
+  const news = useContentStore((s) => s.news);
+
+  const index = React.useMemo(
+    () => buildSearchIndex({ prompts, tools, models, articles, courses, workflows, guides, news }),
+    [prompts, tools, models, articles, courses, workflows, guides, news]
+  );
   const results = React.useMemo(() => rankResults(query, index), [query, index]);
 
   React.useEffect(() => {
