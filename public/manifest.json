@@ -1,0 +1,41 @@
+{
+  "name": "Aether 964",
+  "short_name": "Aether",
+  "description": "AI infrastructure for the new Iraqi digital era. A premium prompt-as-a-service platform.",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#050816",
+  "theme_color": "#050816",
+  "categories": ["productivity", "business", "design"],
+  "lang": "en",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "icons": [
+    { "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Prompt Library",
+      "short_name": "Library",
+      "description": "Browse curated AI prompts",
+      "url": "/library",
+      "icons": [{ "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "Favorites",
+      "short_name": "Favorites",
+      "description": "Your saved prompts",
+      "url": "/favorites",
+      "icons": [{ "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "Updates",
+      "short_name": "Updates",
+      "description": "Latest drops and releases",
+      "url": "/updates",
+      "icons": [{ "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+    }
+  ]
+}
