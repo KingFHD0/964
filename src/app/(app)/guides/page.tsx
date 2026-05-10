@@ -2,10 +2,11 @@
 
 import { motion } from "framer-motion";
 import { ArrowUpRight, Compass } from "lucide-react";
-import { GUIDES } from "@/lib/ecosystem";
+import { useContentStore } from "@/lib/store/content-store";
 import { Badge } from "@/components/ui/Badge";
 
 export default function GuidesPage() {
+  const GUIDES = useContentStore((s) => s.guides);
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 md:px-8 md:py-12">
       <div className="text-[11px] uppercase tracking-[0.22em] text-primary-muted/80">Guides</div>

@@ -4,11 +4,14 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowUpRight, ExternalLink, Search, Star } from "lucide-react";
-import { TOOLS, TOOL_CATEGORIES, type AiTool } from "@/lib/ecosystem";
+import { TOOL_CATEGORIES, type AiTool } from "@/lib/ecosystem";
+import { useContentStore } from "@/lib/store/content-store";
 import { Badge } from "@/components/ui/Badge";
 import { CategoryPills } from "@/components/prompts/CategoryPills";
+import { AdSlot } from "@/components/ads/AdSlot";
 
 export default function ToolsPage() {
+  const TOOLS = useContentStore((s) => s.tools);
   const [query, setQuery] = React.useState("");
   const [cat, setCat] = React.useState<string>("All");
 
@@ -21,7 +24,7 @@ export default function ToolsPage() {
         : true;
       return matchesCat && matchesQ;
     });
-  }, [query, cat]);
+  }, [TOOLS, query, cat]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-12">
@@ -53,6 +56,11 @@ export default function ToolsPage() {
         {filtered.map((t, i) => (
           <ToolCard key={t.id} tool={t} delay={Math.min(i, 8) * 0.04} />
         ))}
+      </div>
+
+      {/* Sponsored — blends naturally after the grid */}
+      <div className="mt-10">
+        <AdSlot placement="tools-inline" variant="inline" />
       </div>
     </div>
   );

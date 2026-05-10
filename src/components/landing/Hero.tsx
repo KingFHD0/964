@@ -5,10 +5,14 @@ import { ArrowRight, PlayCircle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { FloatingSearch } from "./FloatingSearch";
 import { HorizonBeam } from "@/components/cosmic/HorizonBeam";
+import { useContentStore } from "@/lib/store/content-store";
 
 const ease = [0.2, 0.8, 0.2, 1] as const;
 
 export function Hero() {
+  // Read the editable hero copy live from the content store.
+  const homepage = useContentStore((s) => s.homepage);
+
   return (
     <section className="relative isolate flex min-h-[100svh] items-center overflow-hidden pt-20">
       <HorizonBeam />
@@ -22,7 +26,7 @@ export function Hero() {
         >
           <Sparkles className="h-3.5 w-3.5 text-accent-secondary" />
           <span className="text-[11px] uppercase tracking-[0.2em] text-primary/70">
-            The AI operating system for the Middle East
+            {homepage.heroLabel}
           </span>
         </motion.div>
 
@@ -32,9 +36,9 @@ export function Hero() {
           transition={{ duration: 1.1, ease, delay: 0.08 }}
           className="mt-8 font-display text-display-xl font-medium tracking-tight"
         >
-          <span className="text-grad">Create at the</span>
+          <span className="text-grad">{homepage.heroTitleA}</span>
           <br />
-          <span className="text-grad-accent">speed of light.</span>
+          <span className="text-grad-accent">{homepage.heroTitleB}</span>
         </motion.h1>
 
         <motion.p
@@ -43,8 +47,7 @@ export function Hero() {
           transition={{ duration: 1, ease, delay: 0.18 }}
           className="mx-auto mt-6 max-w-2xl text-balance text-base leading-relaxed text-primary/65 md:text-lg"
         >
-          Prompts, tools, models, workflows, and knowledge — one premium surface,
-          calibrated for founders, creators, and studios who move at cinematic pace.
+          {homepage.heroSubtitle}
         </motion.p>
 
         <motion.div
@@ -53,11 +56,20 @@ export function Hero() {
           transition={{ duration: 1, ease, delay: 0.26 }}
           className="mx-auto mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
         >
-          <Button href="/dashboard" size="lg" trailing={<ArrowRight className="h-4 w-4" />}>
-            Enter Aether
+          <Button
+            href={homepage.primaryCta.href}
+            size="lg"
+            trailing={<ArrowRight className="h-4 w-4" />}
+          >
+            {homepage.primaryCta.label}
           </Button>
-          <Button href="#ecosystem" variant="secondary" size="lg" leading={<PlayCircle className="h-4 w-4" />}>
-            Explore the ecosystem
+          <Button
+            href={homepage.secondaryCta.href}
+            variant="secondary"
+            size="lg"
+            leading={<PlayCircle className="h-4 w-4" />}
+          >
+            {homepage.secondaryCta.label}
           </Button>
         </motion.div>
 
@@ -76,13 +88,14 @@ export function Hero() {
           transition={{ duration: 1.4, ease, delay: 0.7 }}
           className="mt-16 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 text-[11px] uppercase tracking-[0.22em] text-primary-muted/60"
         >
-          <span>Built in Baghdad</span>
-          <span className="hidden h-1 w-1 rounded-full bg-white/20 sm:block" />
-          <span>12,000+ prompts</span>
-          <span className="hidden h-1 w-1 rounded-full bg-white/20 sm:block" />
-          <span>Arabic native</span>
-          <span className="hidden h-1 w-1 rounded-full bg-white/20 sm:block" />
-          <span>Offline-ready</span>
+          {homepage.stats.map((label, i, arr) => (
+            <span key={label + i} className="flex items-center gap-x-10">
+              <span>{label}</span>
+              {i < arr.length - 1 ? (
+                <span className="hidden h-1 w-1 rounded-full bg-white/20 sm:block" />
+              ) : null}
+            </span>
+          ))}
         </motion.div>
       </div>
 

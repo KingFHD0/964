@@ -2,10 +2,11 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Zap } from "lucide-react";
-import { AUTOMATIONS } from "@/lib/ecosystem";
+import { useContentStore } from "@/lib/store/content-store";
 import { Badge } from "@/components/ui/Badge";
 
 export default function AutomationPage() {
+  const AUTOMATIONS = useContentStore((s) => s.automations);
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 md:px-8 md:py-12">
       <div className="text-[11px] uppercase tracking-[0.22em] text-primary-muted/80">Automations</div>

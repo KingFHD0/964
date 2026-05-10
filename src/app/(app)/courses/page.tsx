@@ -2,10 +2,11 @@
 
 import { motion } from "framer-motion";
 import { GraduationCap, PlayCircle, Sparkles } from "lucide-react";
-import { COURSES } from "@/lib/ecosystem";
+import { useContentStore } from "@/lib/store/content-store";
 import { Badge } from "@/components/ui/Badge";
 
 export default function CoursesPage() {
+  const COURSES = useContentStore((s) => s.courses);
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-12">
       <div className="text-[11px] uppercase tracking-[0.22em] text-primary-muted/80">Courses</div>

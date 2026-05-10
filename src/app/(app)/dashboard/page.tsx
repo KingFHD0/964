@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight, BookMarked, Flame, Heart, Rocket, Sparkles, TrendingUp } from "lucide-react";
-import { PROMPTS } from "@/lib/prompts";
+import { useContentStore } from "@/lib/store/content-store";
 import { PromptCard } from "@/components/prompts/PromptCard";
 import { PromptDetailDialog } from "@/components/prompts/PromptDetailDialog";
+import { AdSlot } from "@/components/ads/AdSlot";
 import * as React from "react";
 import type { Prompt } from "@/lib/prompts";
 
@@ -17,6 +18,7 @@ const STATS = [
 ];
 
 export default function DashboardPage() {
+  const PROMPTS = useContentStore((s) => s.prompts);
   const [active, setActive] = React.useState<Prompt | null>(null);
   const featured = PROMPTS.slice(0, 3);
   const trending = PROMPTS.slice(3, 9);
@@ -84,6 +86,11 @@ export default function DashboardPage() {
             <div className="mt-1 text-[12px] text-primary/55">{s.delta}</div>
           </motion.div>
         ))}
+      </div>
+
+      {/* Dashboard sponsor — calm, above the fold */}
+      <div className="mt-6">
+        <AdSlot placement="dashboard-top" variant="inline" />
       </div>
 
       {/* Featured */}

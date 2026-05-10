@@ -1,31 +1,57 @@
+"use client";
+
+import * as React from "react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { useParams } from "next/navigation";
 import { ArrowLeft, ArrowUpRight, Clock, Share2 } from "lucide-react";
-import { ARTICLES, getArticleBySlug } from "@/lib/ecosystem";
+import { useContentStore } from "@/lib/store/content-store";
+import type { Article } from "@/lib/ecosystem";
 import { Badge } from "@/components/ui/Badge";
 import { ArticleToc } from "@/components/encyclopedia/ArticleToc";
 import { MarkdownLite } from "@/components/encyclopedia/MarkdownLite";
 import { ReadingProgress } from "@/components/encyclopedia/ReadingProgress";
+import { AdSlot } from "@/components/ads/AdSlot";
 
-type PageProps = { params: Promise<{ slug: string }> };
+/**
+ * Encyclopedia article page — reads live from the content store so admin
+ * edits reflect immediately. Converted to a client component because the
+ * store is persisted in the browser; in production, this would swap back
+ * to a server component fed by the real database.
+ */
+export default function ArticlePage() {
+  const params = useParams<{ slug: string }>();
+  const slug = params.slug;
+  const articles = useContentStore((s) => s.articles);
+  const article = React.useMemo<Article | undefined>(
+    () => articles.find((a) => a.slug === slug),
+    [articles, slug]
+  );
 
-export function generateStaticParams() {
-  return ARTICLES.map((a) => ({ slug: a.slug }));
-}
+  if (!article) {
+    return (
+      <div className="mx-auto flex min-h-[60vh] max-w-xl items-center justify-center px-4 py-20 text-center md:px-8">
+        <div>
+          <div className="text-[11px] uppercase tracking-[0.22em] text-primary-muted/80">404</div>
+          <h1 className="mt-3 font-display text-[28px] font-medium tracking-tight text-grad">
+            Article not found
+          </h1>
+          <p className="mt-2 text-[14px] text-primary/65">
+            The slug <span className="font-mono text-primary/85">{slug}</span> is not in the
+            library. It may have been renamed or deleted.
+          </p>
+          <Link
+            href="/encyclopedia"
+            className="focus-ring mt-6 inline-flex h-10 items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-4 text-[13px] text-primary/85 hover:border-white/[0.14]"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            Back to encyclopedia
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
-export async function generateMetadata({ params }: PageProps) {
-  const { slug } = await params;
-  const a = getArticleBySlug(slug);
-  if (!a) return { title: "Not found" };
-  return { title: a.title, description: a.subtitle };
-}
-
-export default async function ArticlePage({ params }: PageProps) {
-  const { slug } = await params;
-  const article = getArticleBySlug(slug);
-  if (!article) notFound();
-
-  const related = ARTICLES.filter((a) => a.id !== article.id && a.category === article.category).slice(0, 3);
+  const related = articles.filter((a) => a.id !== article.id && a.category === article.category).slice(0, 3);
 
   return (
     <>
@@ -114,8 +140,9 @@ export default async function ArticlePage({ params }: PageProps) {
 
         {/* Floating TOC */}
         <aside className="hidden lg:block">
-          <div className="sticky top-24">
+          <div className="sticky top-24 space-y-5">
             <ArticleToc items={article.toc} />
+            <AdSlot placement="encyclopedia-aside" variant="aside" />
           </div>
         </aside>
       </div>

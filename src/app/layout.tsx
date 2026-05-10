@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/Toaster";
 import { ServiceWorkerRegister } from "@/components/pwa/ServiceWorkerRegister";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import { CommandPaletteProvider } from "@/components/search/CommandPalette";
+import { ThemeSync } from "@/lib/store/theme-sync";
 import "./globals.css";
 
 const inter = Inter({
@@ -67,6 +68,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${ibmArabic.variable}`}>
       <body className="min-h-screen bg-ink-950 text-primary antialiased">
+        <ThemeSync />
         <CosmicBackground />
         <a
           href="#main"

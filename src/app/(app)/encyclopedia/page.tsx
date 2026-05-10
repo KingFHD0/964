@@ -3,11 +3,13 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
-import { ARTICLES, ARTICLE_CATEGORIES } from "@/lib/ecosystem";
+import { ARTICLE_CATEGORIES } from "@/lib/ecosystem";
+import { useContentStore } from "@/lib/store/content-store";
 import { ArticleCard } from "@/components/prompts/ArticleCard";
 import { CategoryPills } from "@/components/prompts/CategoryPills";
 
 export default function EncyclopediaPage() {
+  const ARTICLES = useContentStore((s) => s.articles);
   const [query, setQuery] = React.useState("");
   const [cat, setCat] = React.useState<string>("All");
 
@@ -20,7 +22,7 @@ export default function EncyclopediaPage() {
         : true;
       return matchesCat && matchesQ;
     });
-  }, [query, cat]);
+  }, [ARTICLES, query, cat]);
 
   const featured = ARTICLES.filter((a) => a.featured).slice(0, 2);
   const rest = filtered.filter((a) => !featured.find((f) => f.id === a.id));

@@ -4,7 +4,8 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import { Search, SlidersHorizontal } from "lucide-react";
-import { CATEGORIES, PROMPTS, type Prompt } from "@/lib/prompts";
+import { CATEGORIES, type Prompt } from "@/lib/prompts";
+import { useContentStore } from "@/lib/store/content-store";
 import { PromptCard } from "@/components/prompts/PromptCard";
 import { CategoryPills } from "@/components/prompts/CategoryPills";
 import { PromptDetailDialog } from "@/components/prompts/PromptDetailDialog";
@@ -22,6 +23,8 @@ function LibraryView() {
   const initialQuery = search.get("q") ?? "";
   const initialOpen = search.get("open") ?? "";
 
+  const PROMPTS = useContentStore((s) => s.prompts);
+
   const [query, setQuery] = React.useState(initialQuery);
   const [activeCat, setActiveCat] = React.useState<string>("All");
   const [active, setActive] = React.useState<Prompt | null>(null);
@@ -31,7 +34,8 @@ function LibraryView() {
       const p = PROMPTS.find((x) => x.id === initialOpen);
       if (p) setActive(p);
     }
-  }, [initialOpen]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialOpen, PROMPTS.length]);
 
   const filtered = React.useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -42,7 +46,7 @@ function LibraryView() {
         : true;
       return matchesCat && matchesQ;
     });
-  }, [query, activeCat]);
+  }, [PROMPTS, query, activeCat]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-12">

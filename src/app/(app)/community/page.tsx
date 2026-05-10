@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { MessageCircle, Sparkles, TrendingUp, Users } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
+import { AdSlot } from "@/components/ads/AdSlot";
 
 const THREADS = [
   {
@@ -179,6 +180,8 @@ export default function CommunityPage() {
             <Users className="h-4 w-4 text-accent" />
             <div className="flex-1 text-[13px] text-primary/85">4,212 operators in the room</div>
           </div>
+
+          <AdSlot placement="community-aside" variant="aside" />
         </aside>
       </div>
     </div>

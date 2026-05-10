@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { buildSearchIndex, rankResults } from "@/lib/search-index";
 import type { SearchResult, SearchResultKind } from "@/lib/ecosystem";
+import { useContentStore } from "@/lib/store/content-store";
 import { cn } from "@/lib/cn";
 
 /**
@@ -75,7 +76,18 @@ export function CommandPalette({
   const inputRef = React.useRef<HTMLInputElement>(null);
   const listRef = React.useRef<HTMLUListElement>(null);
 
-  const index = React.useMemo(() => buildSearchIndex(), []);
+  // Pull live snapshot from the content store so admin edits appear instantly.
+  const snapshot = useContentStore((s) => ({
+    prompts: s.prompts,
+    tools: s.tools,
+    models: s.models,
+    articles: s.articles,
+    courses: s.courses,
+    workflows: s.workflows,
+    guides: s.guides,
+    news: s.news
+  }));
+  const index = React.useMemo(() => buildSearchIndex(snapshot), [snapshot]);
   const results = React.useMemo(() => rankResults(query, index), [query, index]);
 
   React.useEffect(() => {

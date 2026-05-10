@@ -3,13 +3,14 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { Cpu, Search, Sparkles } from "lucide-react";
-import { MODELS } from "@/lib/ecosystem";
+import { useContentStore } from "@/lib/store/content-store";
 import { Badge } from "@/components/ui/Badge";
 import { CategoryPills } from "@/components/prompts/CategoryPills";
 
 const KINDS = ["Frontier LLM", "Open LLM", "Image", "Video", "Audio", "Embedding"] as const;
 
 export default function ModelsPage() {
+  const MODELS = useContentStore((s) => s.models);
   const [cat, setCat] = React.useState<string>("All");
   const [query, setQuery] = React.useState("");
 
@@ -22,7 +23,7 @@ export default function ModelsPage() {
         : true;
       return matchesCat && matchesQ;
     });
-  }, [cat, query]);
+  }, [MODELS, cat, query]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-12">

@@ -2,10 +2,11 @@
 
 import { motion } from "framer-motion";
 import { BarChart3, Briefcase } from "lucide-react";
-import { BUSINESS_SYSTEMS } from "@/lib/ecosystem";
+import { useContentStore } from "@/lib/store/content-store";
 import { Badge } from "@/components/ui/Badge";
 
 export default function BusinessPage() {
+  const BUSINESS_SYSTEMS = useContentStore((s) => s.businessSystems);
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-12">
       <div className="text-[11px] uppercase tracking-[0.22em] text-primary-muted/80">Business Systems</div>

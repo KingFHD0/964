@@ -3,13 +3,15 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { Globe, Search } from "lucide-react";
-import { NEWS } from "@/lib/ecosystem";
+import { useContentStore } from "@/lib/store/content-store";
 import { Badge } from "@/components/ui/Badge";
 import { CategoryPills } from "@/components/prompts/CategoryPills";
+import { AdSlot } from "@/components/ads/AdSlot";
 
 const KINDS = ["Release", "Research", "Industry", "Region"] as const;
 
 export default function NewsPage() {
+  const NEWS = useContentStore((s) => s.news);
   const [cat, setCat] = React.useState<string>("All");
   const [query, setQuery] = React.useState("");
 
@@ -22,7 +24,7 @@ export default function NewsPage() {
         : true;
       return matchesCat && matchesQ;
     });
-  }, [cat, query]);
+  }, [NEWS, cat, query]);
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 md:px-8 md:py-12">
@@ -52,42 +54,45 @@ export default function NewsPage() {
 
       <div className="mt-10 space-y-3">
         {filtered.map((n, i) => (
-          <motion.article
-            id={n.id}
-            key={n.id}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.5,
-              delay: Math.min(i, 8) * 0.04,
-              ease: [0.2, 0.8, 0.2, 1]
-            }}
-            className="card-premium group flex items-start gap-4 p-5 lift ring-accent-hover"
-          >
-            <div
-              aria-hidden
-              className="mt-1.5 h-2 w-2 shrink-0 rounded-full"
-              style={{
-                background: n.unread ? "#5CE1E6" : "rgba(255,255,255,0.15)",
-                boxShadow: n.unread ? "0 0 10px rgba(92,225,230,0.6)" : "none"
+          <React.Fragment key={n.id}>
+            <motion.article
+              id={n.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.5,
+                delay: Math.min(i, 8) * 0.04,
+                ease: [0.2, 0.8, 0.2, 1]
               }}
-            />
-            <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-center gap-2">
-                <Badge tone={n.kind === "Region" ? "secondary" : n.kind === "Release" ? "accent" : "mute"}>
-                  {n.kind}
-                </Badge>
-                <span className="text-[12px] text-primary-muted">
-                  {n.source} · {n.date}
-                </span>
+              className="card-premium group flex items-start gap-4 p-5 lift ring-accent-hover"
+            >
+              <div
+                aria-hidden
+                className="mt-1.5 h-2 w-2 shrink-0 rounded-full"
+                style={{
+                  background: n.unread ? "#5CE1E6" : "rgba(255,255,255,0.15)",
+                  boxShadow: n.unread ? "0 0 10px rgba(92,225,230,0.6)" : "none"
+                }}
+              />
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge tone={n.kind === "Region" ? "secondary" : n.kind === "Release" ? "accent" : "mute"}>
+                    {n.kind}
+                  </Badge>
+                  <span className="text-[12px] text-primary-muted">
+                    {n.source} · {n.date}
+                  </span>
+                </div>
+                <h3 className="mt-2 font-display text-[17px] font-medium leading-snug tracking-tight text-primary">
+                  {n.title}
+                </h3>
+                <p className="mt-1.5 text-[13.5px] leading-relaxed text-primary/65">{n.body}</p>
               </div>
-              <h3 className="mt-2 font-display text-[17px] font-medium leading-snug tracking-tight text-primary">
-                {n.title}
-              </h3>
-              <p className="mt-1.5 text-[13.5px] leading-relaxed text-primary/65">{n.body}</p>
-            </div>
-            <Globe className="mt-1 hidden h-4 w-4 shrink-0 text-primary-muted/60 sm:block" />
-          </motion.article>
+              <Globe className="mt-1 hidden h-4 w-4 shrink-0 text-primary-muted/60 sm:block" />
+            </motion.article>
+            {/* Insert sponsored story after the 3rd item to break the rhythm calmly */}
+            {i === 2 ? <AdSlot placement="news-inline" variant="inline" /> : null}
+          </React.Fragment>
         ))}
       </div>
     </div>

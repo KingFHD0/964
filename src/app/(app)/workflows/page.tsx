@@ -2,10 +2,11 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Rocket } from "lucide-react";
-import { WORKFLOWS } from "@/lib/ecosystem";
+import { useContentStore } from "@/lib/store/content-store";
 import { Badge } from "@/components/ui/Badge";
 
 export default function WorkflowsPage() {
+  const WORKFLOWS = useContentStore((s) => s.workflows);
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-12">
       <div className="text-[11px] uppercase tracking-[0.22em] text-primary-muted/80">Workflows</div>

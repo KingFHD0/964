@@ -1,23 +1,28 @@
 import type { SearchResult } from "@/lib/ecosystem";
-import { PROMPTS } from "@/lib/prompts";
-import {
-  TOOLS,
-  MODELS,
-  ARTICLES,
-  COURSES,
-  WORKFLOWS,
-  GUIDES,
-  NEWS
-} from "@/lib/ecosystem";
+import type { ContentStore } from "@/lib/store/content-store";
 
 /**
- * buildSearchIndex — flattens the ecosystem into a single searchable list.
- * The palette runs a tiny fuzzy match against this list.
+ * buildSearchIndex — flattens live store content into a single searchable list.
+ *
+ * Accepts a snapshot of the content store so it stays reactive when the admin
+ * edits anything. The palette re-memoizes on every relevant store slice.
  */
-export function buildSearchIndex(): SearchResult[] {
+export function buildSearchIndex(
+  snapshot: Pick<
+    ContentStore,
+    | "prompts"
+    | "tools"
+    | "models"
+    | "articles"
+    | "courses"
+    | "workflows"
+    | "guides"
+    | "news"
+  >
+): SearchResult[] {
   const items: SearchResult[] = [];
 
-  for (const p of PROMPTS) {
+  for (const p of snapshot.prompts) {
     items.push({
       id: `prompt:${p.id}`,
       kind: "prompt",
@@ -28,7 +33,7 @@ export function buildSearchIndex(): SearchResult[] {
     });
   }
 
-  for (const t of TOOLS) {
+  for (const t of snapshot.tools) {
     items.push({
       id: `tool:${t.id}`,
       kind: "tool",
@@ -39,7 +44,7 @@ export function buildSearchIndex(): SearchResult[] {
     });
   }
 
-  for (const m of MODELS) {
+  for (const m of snapshot.models) {
     items.push({
       id: `model:${m.id}`,
       kind: "model",
@@ -50,7 +55,7 @@ export function buildSearchIndex(): SearchResult[] {
     });
   }
 
-  for (const a of ARTICLES) {
+  for (const a of snapshot.articles) {
     items.push({
       id: `article:${a.id}`,
       kind: "article",
@@ -61,7 +66,7 @@ export function buildSearchIndex(): SearchResult[] {
     });
   }
 
-  for (const c of COURSES) {
+  for (const c of snapshot.courses) {
     items.push({
       id: `course:${c.id}`,
       kind: "course",
@@ -72,7 +77,7 @@ export function buildSearchIndex(): SearchResult[] {
     });
   }
 
-  for (const w of WORKFLOWS) {
+  for (const w of snapshot.workflows) {
     items.push({
       id: `workflow:${w.id}`,
       kind: "workflow",
@@ -83,7 +88,7 @@ export function buildSearchIndex(): SearchResult[] {
     });
   }
 
-  for (const g of GUIDES) {
+  for (const g of snapshot.guides) {
     items.push({
       id: `guide:${g.id}`,
       kind: "guide",
@@ -94,7 +99,7 @@ export function buildSearchIndex(): SearchResult[] {
     });
   }
 
-  for (const n of NEWS) {
+  for (const n of snapshot.news) {
     items.push({
       id: `news:${n.id}`,
       kind: "news",
@@ -129,20 +134,16 @@ export function rankResults(query: string, index: SearchResult[]) {
 function score(q: string, r: SearchResult): number {
   const haystack = `${r.title} ${r.description} ${r.meta ?? ""}`.toLowerCase();
   if (haystack.includes(q)) {
-    // prefer title matches
     if (r.title.toLowerCase().includes(q)) return q.length / r.title.length;
     return 1 + q.length / haystack.length;
   }
-  // token scoring
   const tokens = q.split(/\s+/);
   let allFound = true;
-  let total = 0;
   for (const t of tokens) {
     if (!haystack.includes(t)) {
       allFound = false;
       break;
     }
-    total += t.length;
   }
   if (allFound) return 2 + tokens.length;
   return Infinity;

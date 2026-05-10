@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Keep admin + APIs out of search indexes
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap: https://aether964.com/sitemap.xml
